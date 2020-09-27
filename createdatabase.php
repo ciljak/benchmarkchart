@@ -18,17 +18,16 @@ if($dbc === false){
 }
  
 // Attempt create table query execution
-$sql = "CREATE TABLE mailinglist(
+$sql = "CREATE TABLE benchmark_chart (
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    firstname_of_publisher VARCHAR(40) ,
-    secondname_of_publisher VARCHAR(40) ,
     nickname VARCHAR(40) NOT NULL,
     write_date DATETIME NOT NULL,
     email VARCHAR(70) NOT NULL , /* not UNIQUE e-mails because one user can submitt different benchmark results */
    /* message_text TEXT */ /* optionally add boolean fields for subscription */
     GDPR_accept BOOLEAN, /* BOOLEAN value if user accepted GDPR */
-                            /* link to image */
-                            /* submit text from publisher */
+    screenshot  VARCHAR(70) NOT NULL ,                      /* link to image */
+    message_from_submitter TEXT,                        /* submit text from publisher */
+    score INT NOT NULL
 )";
 if(mysqli_query($dbc, $sql)){
     echo "Table created successfully.";
