@@ -124,6 +124,11 @@ td { /* cell of table */
   border-bottom: 1px dashed #2e2e2e ;
 
    } 
+
+   #DEL { /* p text in article of guestbook */
+    color: #c21818;
+    
+   }  
 /* ************************************************ */
 /* Buttons additional formating                    */
 /* ************************************************ */
