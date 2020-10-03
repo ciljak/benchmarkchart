@@ -6,6 +6,7 @@
 
 <?php // leading part of page for simple header securing and basic variable setup
     require_once('appvars.php'); // including variables for database
+    require_once('authorize.php'); // authorization script for simple header authorization
 	// two variables for message and styling of the mesage with bootstrap
 	$msg = '';
 	$msgClass = '';

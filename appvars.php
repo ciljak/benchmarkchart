@@ -29,3 +29,15 @@
  
 ?>
 
+<!-- ***************************************************************************** -->
+<!--    Part III   |                  authorization constants                      -->
+<!-- ***************************************************************************** -->
+<?php
+  define('USERNAME', 'administrator');
+  define('PASSWORD_SHA1', '02cc4d03794b3624b076e48a6d6d18b1f2af8dc1'); // SHA value for wery weak demonstration password PassworD newer use in production environment!!!
+     // sha1 has code was generated for example by online app http://www.sha1-online.com/
+ /* location where images are transfered afte succesfull submit */
+ 
+?>
+
+

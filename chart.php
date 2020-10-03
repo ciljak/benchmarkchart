@@ -1,7 +1,7 @@
 <!-- ******************************************************************* -->
-<!-- PHP "self" code handling submitting score into a chart              -->
+<!-- PHP code of actual chart of submitted benchmarks                    -->
 <!-- ******************************************************************* -->
-<!-- Vrsion: 1.0        Date: 27-XX.X.2020 by CDesigner.eu               -->
+<!-- Vrsion: 1.0        Date: 4.10.2020 by CDesigner.eu                  -->
 <!-- ******************************************************************* -->
 
 <?php
@@ -170,17 +170,7 @@
 
 	};
 
-	// if reset button clicked
-	if(filter_has_var(INPUT_POST, 'reset')){
-		$msg = '';
-		$msgClass = ''; // bootstrap format for allert message with red color
-		$nickname ='';
-		$score ='';
-        $email ='';
-        $message_from_submitter ='';
-		$gdpr = false; 
-		
-	};
+	
 		
 ?>
 
@@ -190,7 +180,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title> Benchmark results chart  </title>
+	<title> Benchmark live charts  </title>
 	<link rel="stylesheet" href="./css/bootstrap.min.css"> <!-- bootstrap mini.css file -->
 	<link rel="stylesheet" href="./css/style.css"> <!-- my local.css file -->
     <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
@@ -201,7 +191,7 @@
 	<nav class="navbar navbar-default">
       <div class="container">
         <div class="navbar-header">    
-          <a class="navbar-brand" href="index.php">3dmark results chart v 1.0 - results & submit your score</a>
+          <a class="navbar-brand" href="index.php">3dmark live result chart v 1.0</a>
         </div>
       </div>
     </nav>
@@ -213,90 +203,10 @@
       <?php endif; ?>	
         
         <br> 
-        <img id="calcimage" src="./images/benchmark.jpg" alt="Calc image" width="150" height="150">
+        <img id="calcimage" src="./images/benchmark.jpg" alt="benchmark image" width="150" height="150">
         <br>
-
-      <form enctype="multipart/form-data" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-      <input type="hidden" name="MAX_FILE_SIZE" value="5242880">
-	      <div class="form-group">
-		      <label>* Please provide Your score:</label>
-		      <input type="text" onfocus="this.value='<?php echo isset($_POST['score']) ? $score : ''; ?>'" name="score" class="form-control" value="<?php echo isset($_POST['score']) ? $score : 'Your becnhmark score'; ?>">
-              
-
-			  <label>* Please provide Your nickname:</label>
-		      <input type="text" onfocus="this.value='<?php echo isset($_POST['nickname']) ? $nickname : ''; ?>'" name="nickname" class="form-control" value="<?php echo isset($_POST['nickname']) ? $nickname : 'Your nickname'; ?>">
-	      </div>
-	      <div class="form-group">
-	      	<label>* E-mail:</label>
-	      	<input type="text" onfocus="this.value='<?php echo isset($_POST['email']) ? $email : '@'; ?>'"name="email" class="form-control" value="<?php echo isset($_POST['email']) ? $email : '@'; ?>">
-	      </div>
-          
-          <label>* Please select location of your score screenshot from drive - max 5MB!</label>
-          <div class="custom-file">
-          
-	      <input type="file" name="screenshot" class="custom-file-input" id="screenshot" lang="en">
-              <label class="custom-file-label" for="customFile">Screenshot:</label>
-	      </div>
-            
-             <script type="application/javascript"> // javascript handling chaging filename of selected file
-              $('input[type="file"]').change(function(e){
-              var fileName = e.target.files[0].name;
-              $('.custom-file-label').html(fileName);
-              });
-             </script>
-
-          <br><br>
-
-          
-		  <div class="form-group">
-	      	<label>Optionally - Your score comment:</label>  <!-- textera for input large text -->
-	      	<textarea id="message_from_submitter" onfocus="this.value='<?php echo isset($_POST['message_from_submitter']) ? $message_from_submitter : 'Your score escribing text goes here ...'; ?>'" name="message_from_submitter" class="form-control" rows="3" cols="50"><?php echo isset($_POST['message_from_submitter']) ? $message_from_submitter : 'Your score escribing text goes here ...'; ?></textarea>
-	      </div>
-
-		  <div class="form-group">
-	      	<input type="checkbox" name="gdpr" class="form-control" value="<?php echo isset($_POST['gdpr']) ? $gdpr : 'gdpr'; ?>">
-			<label>* I agree with GDPR regulations</label>
-
-			
-	      </div>
-
-		  <!-- div class="form-group">
-	      	<label>Your message for Guestbook:</label-->  <!-- textera for input large text -->
-	      	<!-- textarea id="postmessage" name="postmessage" class="form-control" rows="6" cols="50"><?php echo isset($_POST['postmessage']) ? $postmessage : 'Your text goes here ...'; ?></textarea>
-	      </div-->
-	 
-		  <button type="submit" name="submit" class="btn btn-warning"> Submitt score </button>
-		  
-		  <button type="submit" name="delete" class="btn btn-danger"> Delete recently posted score </button>
-
-		  <button type="submit" name="reset" class="btn btn-info"> Reset form </button>
-          <br><br>
-		  <?php
-		  echo ' <button class="btn btn-secondary btn-lg " onclick="location.href=\'chart.php\'" type="button">  Take a look at actual chart -> </button>';
-		  ?>
-		  <br>
-
-		  <?php   //part displaying info after succesfull added subscriber into a mailinglist
-				 if ($is_result ) {
-					
-
-						echo "<br> <br>";
-						echo " <table class=\"table table-success\"> ";
-						echo " <tr>
-                               <td><h5> <em> E-mail: </em> $score from $nickname  </h5> <h5> has been succesfully added to becnhmark chart </h5> ";
-                               $image_location = IMAGE_PATH.$screenshot;
-                        echo " <img src=\"$image_location\" alt=\" score image \"  height=\"150\"> ";       
-						if ($gdpr == true ) { echo "<h5> GDPR accepted </h5>";	} ; //if GDPR rights granted
-						  
-						echo "	   <td>   </tr> "; 
-						echo " </table> ";
-					
-					//echo " <input type="text" id="result_field" name="result_field" value="$result"  >  <br>" ;
-				} ; 
-				 ?>
-                 <br>
-		
-	  </form>
+        
+      
       <?php // code showing all subscribers in form of a table at end of the page
 
 /* Attempt MySQL server connection. Assuming you are running MySQL
@@ -320,6 +230,10 @@ $sql = "SELECT * FROM benchmark_chart ORDER BY score DESC";  // read in reverse 
 
 echo "<h4>Chart of benchmark results</h4>";
 echo "<br>";
+
+
+echo ' <button class="btn btn-success btn-lg " onclick="location.href=\'index.php\'" type="button">  Add your score here </button>';
+		  
 //echo ' <button class="btn btn-secondary btn-lg " onclick="location.href=\'unsubscribe.php\'" type="button">  Unsubscribe by e-mail -> </button>';
 
 echo "<br>"; echo "<br>";
