@@ -91,6 +91,7 @@ h5 { /* e-mail*/
 
 .mailinglist {
     background-color: rgb(218, 255, 162);
+    text-align: center;
    }
 
   .mailinglistbreak  { /*  separation between article of guestbook of white color */
@@ -103,6 +104,36 @@ h5 { /* e-mail*/
     padding: 15px;
     border: 1px solid #2e2e2e;
    }
+
+/* ************************************************ */
+/* Benchamrkchart first position list display       */
+/* ************************************************ */ 
+#first {
+  background-color: rgb(255, 129, 129);
+  text-align: center;
+  font-size:18px;
+ }
+ #secondandthree {
+  background-color: rgb(178, 255, 159);
+  text-align: center;
+  font-size:18px;
+ }
+
+ #others {
+  background-color: rgb(218, 255, 162);
+  text-align: center;
+ }
+
+ #gray_under_picture {
+  background-color: rgb(88, 88, 88);
+  text-align: center;
+ }
+
+ #chart_table_header {
+  
+  text-align: center;
+ }
+
 
   
 
@@ -118,12 +149,12 @@ th { /* header of table */
 
    } 
 
-td { /* cell of table */
-  padding: 1px 10px 1px 10px;
-  background-color: rgb(218, 255, 162) ;
-  border-bottom: 1px dashed #2e2e2e ;
-
-   } 
+  td { /* cell of table */
+    padding: 5px 10px 5px 10px;
+    background-color: rgb(218, 255, 162) ;
+    border-bottom: 1px dashed #2e2e2e ;
+  
+     }  
 
    #DEL { /* p text in article of guestbook */
     color: #c21818;

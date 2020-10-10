@@ -10,168 +10,6 @@
 	$msg = '';
 	$msgClass = '';
 
-	// default values of auxiliary variables
-	$email = "";
-	$nickname = "";
-	$screenshot = "";
-	$gdpr = false;
-    $score = '0';
-    $message_from_submitter = '';
-	$is_result = false; //before hitting submit button no result is available
-	
-
-
-	// Control if data was submitted
-	if(filter_has_var(INPUT_POST, 'submit')){
-		// Data obtained from $_postmessage are assigned to local variables
-		$nickname = htmlspecialchars($_POST['nickname']);
-		$screenshot = htmlspecialchars($_FILES['screenshot']['name']);
-		$email = htmlspecialchars($_POST['email']);
-		$gdpr = isset($_POST['gdpr']); // checkbox doesnot send post data, they must be checked for its set state !!!
-        $score = htmlspecialchars($_POST['score']); 
-        $message_from_submitter = htmlspecialchars($_POST['message_from_submitter']);
-		
-		
-
-		// Controll if all required fields was written
-		if(!empty($email) && !empty($nickname) && !empty($score) && !empty($screenshot) && $gdpr ){
-			// If check passed - all needed fields are written
-			// Check if E-mail is valid
-			if(filter_var($email, FILTER_VALIDATE_EMAIL) === false){
-				// E-mail is not walid
-				$msg = 'Please use a valid email';
-				$msgClass = 'alert-danger';
-			} else {
-				// E-mail is ok
-				$is_result = true;
-				$toEmail = 'ciljak@localhost.org'; //!!! e-mail address to send to - change for your needs!!!
-				$subject = 'New submitted score '.$nickname.' '.$score;
-				$body = '<h2>To your becnhmark chart was added new score from:</h2>
-					<h4>Name</h4><p>'.$nickname.'</p>
-					<h4>Email</h4><p>'.$email.'</p>
-					';
-
-				// Email Headers
-				$headers = "MIME-Version: 1.0" ."\r\n";
-				$headers .="Content-Type:text/html;charset=UTF-8" . "\r\n";
-
-				// Additional Headers
-                $headers .= "From: " .$nickname. "<".$email.">". "\r\n";
-                
-                // move image to /images final folder from demporary download location
-                $target = IMAGE_PATH . $screenshot;
-
-				// !!! Add entry to the database and redraw all score in chart list descending from highest score
-
-				   // insert into databse 
-                      if (move_uploaded_file($_FILES['screenshot']['tmp_name'], $target)) {
-						// make database connection
-						$dbc = mysqli_connect(DB_HOST, DB_USER, DB_PW, DB_NAME);
-                        // Check connection
-							if($dbc === false){
-								die("ERROR: Could not connect to database. " . mysqli_connect_error());
-							}
-						
-						// INSERT new entry
-					    $date = date('Y-m-d H:i:s'); // get current date to log into databse along postmessage written
-						$sql = "INSERT INTO benchmark_chart (nickname, write_date, email, GDPR_accept, screenshot, message_from_submitter, score) 
-						VALUES ('$nickname', now() , '$email' , '$gdpr' , '$screenshot', '$message_from_submitter', '$score')";
-
-
-
-						if(mysqli_query($dbc, $sql)){
-							
-							$msg = 'New score '.$score. ' from '. $nickname. ' succesfully added to chart.';
-					        $msgClass = 'alert-success';
-						} else {
-							
-							$msg = "ERROR: Could not able to execute $sql. " . mysqli_error($dbc);
-					        $msgClass = 'alert-danger';
-						}
-
-						// end connection
-                            mysqli_close($dbc);
-                      };       
-				if(mail($toEmail, $subject, $body, $headers)){
-					// Email Sent
-					$msg .= ' Your benchmark score was sucessfully send via e-mail to page admin.';
-					$msgClass = 'alert-success';
-				} else {
-					// Failed
-					$msg = ' Your benchmark was not sucessfully send via e-mail to page admin.';
-					$msgClass = 'alert-danger';
-				}
-			}
-		} else {
-			// Failed - if not all fields are fullfiled
-			$msg = 'Please fill in all * marked contactform fields';
-			$msgClass = 'alert-danger'; // bootstrap format for allert message with red color
-		}
-
-	};	
-  
-	// if delete button clicked
-	if(filter_has_var(INPUT_POST, 'delete')){
-		if(filter_var($email, FILTER_VALIDATE_EMAIL) === false){
-			// E-mail is not walid
-			$msg = 'Please use a valid email';
-			$msgClass = 'alert-danger';
-		} else {
-
-		    $msg = 'Delete last mesage hit';
-			$msgClass = 'alert-danger'; // bootstrap format for allert message with red color
-        
-            // delete from database
-
-			// make database connection
-			$dbc = mysqli_connect(DB_HOST, DB_USER, DB_PW, DB_NAME);
-
-			// Check connection
-				if($dbc === false){
-					die("ERROR: Could not connect to database. " . mysqli_connect_error());
-				}
-			
-			// DELETE last input by matching your written message
-			   // obtain message string for comparison
-
-               $email = htmlspecialchars($_POST['email']); 
-               $nickname = htmlspecialchars($_POST['nickname']); 
-			   
-
-			   // create DELETE query
-			   $sql = "DELETE FROM benchmark_chart WHERE email = "."'$email'". " AND nickname = "."'$nickname'" ;
-
-
-
-				if(mysqli_query($dbc, $sql)){
-					
-					$msg = 'Latest score scuccessfully removed from the chart.';
-					$msgClass = 'alert-success';
-
-					// clear entry fileds after sucessfull deleting from database
-					$email = "";
-                    $nickname = "";
-                    $screenshot = "";
-                    $gdpr = false;
-                    $score = '0';
-                    $message_from_submitter = '';
-                    $is_result = false; //before hitting submit button no result is available
-				} else{
-					
-					$msg = "ERROR: Could not able to execute $sql. " . mysqli_error($dbc);
-					$msgClass = 'alert-danger';
-				}
-
-			// end connection
-				mysqli_close($dbc);
-
-			}
-			
-
-	};
-
-	
-		
 ?>
 
 <!-- **************************************** -->
@@ -232,7 +70,7 @@ echo "<h4>Chart of benchmark results</h4>";
 echo "<br>";
 
 
-echo ' <button class="btn btn-success btn-lg " onclick="location.href=\'index.php\'" type="button">  Add your score here </button>';
+echo ' <button class="btn btn-success btn-lg " onclick="location.href=\'index.php\'" type="button"> >>> Add your score here <<< </button>';
 		  
 //echo ' <button class="btn btn-secondary btn-lg " onclick="location.href=\'unsubscribe.php\'" type="button">  Unsubscribe by e-mail -> </button>';
 
@@ -243,23 +81,34 @@ echo "<br>"; echo "<br>";
             // create table output
             echo "<table>"; //head of table
                 echo "<tr>";
-                    echo "<th>id</th>";
-                    echo "<th>score</th>";
-                    echo "<th>nickname</th>";
-                    echo "<th>date of post</th>";
-                    echo "<th>screenshot</th>";
+					//echo "<th>id</th>"; this line is changed to incrementing number showing position of the score in chart
+					echo "<th id=\"chart_table_header\">position</th>";
+                    echo "<th id=\"chart_table_header\">score</th>";
+                    echo "<th id=\"chart_table_header\">nickname</th>";
+                    echo "<th id=\"chart_table_header\">date of post</th>";
+                    echo "<th id=\"chart_table_header\">screenshot</th>";
                     
                     
-                echo "</tr>";
+				echo "</tr>";
+			$position = 1;	// first initialization of position
             while($row = mysqli_fetch_array($output)){ //next rows outputed in while loop
-                echo " <div class=\"mailinglist\"> " ;
+				//echo " <div class=\"mailinglist\"> " ; class identification must differ first, two second and other position
+				switch ($position) { // along position from first to bottom displayed rows are marked with different names and recolored in style.css
+					case 1: $display='first' ; break;
+					case 2:
+					case 3: $display='secondandthree' ; break;
+					default: $display='others' ;
+
+				};
+					
                 echo "<tr>";
-                    echo "<td>" . $row['id'] . "</td>";
-                    echo "<td>" . $row['score'] . "</td>";
-                    echo "<td>" . $row['nickname'] . "</td>";
-                    echo "<td>" . $row['write_date'] . "</td>";
+					//echo "<td>" . $row['id'] . "</td>"; this line is changed to incrementing number showing position of the score in chart
+					echo "<td id=\"$display\">" . $position++ . "</td>"; // increases number of position after disply by one
+                    echo "<td id=\"$display\">" . $row['score'] . "</td>";
+                    echo "<td id=\"$display\">" . $row['nickname'] . "</td>";
+                    echo "<td id=\"$display\">" . $row['write_date'] . "</td>";
                     $image_location = IMAGE_PATH.$row['screenshot'];
-                        echo "<td> <img src=\"$image_location\" alt=\" score image \"  height=\"95\"> <td>"; 
+                        echo "<td id=\"gray_under_picture\"> <img src=\"$image_location\" alt=\" score image \"  height=\"95\"> </td>"; 
                 echo "</tr>";
                 echo " </div> " ;
             }

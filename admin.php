@@ -101,7 +101,7 @@ echo "<br>"; echo "<br>";
                     echo "<td>" . $row['nickname'] . "</td>";
                     echo "<td>" . $row['write_date'] . "</td>";
                     $image_location = IMAGE_PATH.$row['screenshot'];
-                        echo "<td> <img src=\"$image_location\" alt=\" score image \"  height=\"95\"> <td>"; 
+                        echo "<td> <img src=\"$image_location\" alt=\" score image \"  height=\"95\"> </td>"; 
                 echo "</tr>";
 
                 // removal line with removing link line

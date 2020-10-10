@@ -110,8 +110,8 @@
 
 	};	
   
-	// if delete button clicked
-	if(filter_has_var(INPUT_POST, 'delete')){
+	// if delete button clicked - not well imlepented yet
+	/* if(filter_has_var(INPUT_POST, 'delete')){
 		if(filter_var($email, FILTER_VALIDATE_EMAIL) === false){
 			// E-mail is not walid
 			$msg = 'Please use a valid email';
@@ -169,6 +169,7 @@
 			
 
 	};
+	*/
 
 	// if reset button clicked
 	if(filter_has_var(INPUT_POST, 'reset')){
@@ -267,8 +268,9 @@
 	 
 		  <button type="submit" name="submit" class="btn btn-warning"> Submitt score </button>
 		  
+		  <!-- remove comment after implementation
 		  <button type="submit" name="delete" class="btn btn-danger"> Delete recently posted score </button>
-
+          -->
 		  <button type="submit" name="reset" class="btn btn-info"> Reset form </button>
           <br><br>
 		  <?php
@@ -345,7 +347,7 @@ echo "<br>"; echo "<br>";
                     echo "<td>" . $row['nickname'] . "</td>";
                     echo "<td>" . $row['write_date'] . "</td>";
                     $image_location = IMAGE_PATH.$row['screenshot'];
-                        echo "<td> <img src=\"$image_location\" alt=\" score image \"  height=\"95\"> <td>"; 
+                        echo "<td> <img src=\"$image_location\" alt=\" score image \"  height=\"95\"> </td>"; 
                 echo "</tr>";
                 echo " </div> " ;
             }
